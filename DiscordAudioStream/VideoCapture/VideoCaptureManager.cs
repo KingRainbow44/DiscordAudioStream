@@ -1,6 +1,7 @@
 ﻿using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Drawing;
+using System.Windows.Forms;
 
 using DiscordAudioStream.VideoCapture.CaptureStrategy;
 
@@ -23,11 +24,20 @@ public class VideoCaptureManager : IDisposable
     private readonly CaptureState captureState;
     private static readonly ConcurrentQueue<Bitmap> frameQueue = new();
 
+    private readonly Dictionary<Screen, CaptureSource> screenSources = new();
+
     private CaptureSource? currentSource;
     private readonly object currentSourceLock = new();
 
     public VideoCaptureManager(CaptureState captureState)
     {
+        // Populate the screens.
+        foreach (Screen screen in Screen.AllScreens)
+        {
+            captureState.Screen = screen;
+            screenSources[screen] = CaptureSourceFactory.Build(captureState);
+        }
+
         this.captureState = captureState;
         captureState.TriggerChangeEvents = true;
         // Update the capture state in a separate thread to avoid deadlocks
@@ -92,10 +102,11 @@ public class VideoCaptureManager : IDisposable
             stopwatch.Restart();
             try
             {
-                lock (currentSourceLock)
-                {
-                    EnqueueFrame(currentSource.CaptureFrame());
-                }
+                // Check screen to capture from.
+                Screen screen = Screen.FromPoint(Cursor.Position);
+                CaptureSource source = screenSources[screen];
+
+                EnqueueFrame(source.CaptureFrame());
             }
             catch (Exception e)
             {

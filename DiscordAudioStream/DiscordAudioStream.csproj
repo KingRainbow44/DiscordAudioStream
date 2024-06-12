@@ -34,6 +34,7 @@
     <DebugType>embedded</DebugType>
     <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
     <WarningLevel>7</WarningLevel>
+    <GenerateResourceUsePreserializedResources>true</GenerateResourceUsePreserializedResources>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -45,6 +46,7 @@
     <DebugType>embedded</DebugType>
     <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
     <WarningLevel>7</WarningLevel>
+    <GenerateResourceUsePreserializedResources>true</GenerateResourceUsePreserializedResources>
   </PropertyGroup>
 
   <ItemGroup>
@@ -66,6 +68,7 @@
     <PackageReference Include="Mono.Options" Version="6.12.0.148" />
     <PackageReference Include="NAudio" Version="1.10.0" />
     <PackageReference Include="SharpDX.Direct3D11" Version="4.2.0" />
+    <PackageReference Include="System.Resources.Extensions" Version="9.0.0-preview.5.24306.7" />
     <PackageReference Include="System.Text.Json" Version="8.0.0-rc.2.23479.6" />
   </ItemGroup>
 
